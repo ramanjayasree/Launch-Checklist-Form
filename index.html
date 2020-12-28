@@ -1,120 +1,115 @@
 <!DOCTYPE>
 <html>
-    <head>
-        <title>Launch Checklist</title>
-        <link rel = "stylesheet" type = "text/css" href = "styles.css" />
-        <script src = "script.js"></script>
-    </head>
-    <script>
-        window.addEventListener("load", function() {
-           
-            let form = document.querySelector("form");
-           
-           form.addEventListener("submit", function(event) {
-              let pilotNameInput = document.querySelector("input[name=pilotName]");
-              let copilotNameInput = document.querySelector("input[name=copilotName]");
-              let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
-              let cargoMassInput = document.querySelector("input[name=cargoMass]");
-              
-              // User Input validations 
-              if (pilotNameInput.value === ""){
-                   alert("Pilot name is required");
-                   document.getElementById("pilotName").focus();
-                     event.preventDefault();
-               }
-               else if (copilotNameInput.value === "") {
-                   alert("Copilot name is required");
-                   document.getElementById("copilotName").focus();
-                     event.preventDefault();
-               } 
-               else if (fuelLevelInput.value === "" || isNaN(fuelLevelInput.value))  {
-                   alert("Fuel level needs to be entered and should be a number");
-                   document.getElementById("fuelLevel").focus();
-                     event.preventDefault();
-               }
-               else if (cargoMassInput.value === "" || isNaN(cargoMassInput.value)) {
-                  alert("Cargo Mass should be entered and must be a number");
-                  document.getElementById("cargoMass").focus();
-                    event.preventDefault();
-               }
 
-              
+<head>
+    <title>Launch Checklist</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="script.js"></script>
+</head>
+<script>
+    window.addEventListener("load", function () {
 
+        
+        let form = document.querySelector("form");
 
-               
-             });
+        form.addEventListener("submit", function (event) {
+            let pilotNameInput = document.querySelector("input[name=pilotName]");
+            let copilotNameInput = document.querySelector("input[name=copilotName]");
+            let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
+            let cargoMassInput = document.querySelector("input[name=cargoMass]");
 
-             
-             
-        });
-
-       
-
-        function launchStatus(){
-
-            if (document.getElementById("fuelLevel").value < 10000){
-                        alert("Shuttle not ready for launch");
-                        //alert(document.getElementById("launchStatus").value);
-                        //document.getElementById("fuelLevel").focus();
-                        document.getElementById("launchStatus").innerHTML = "Not ready for launch";
-                        document.getElementById("faultyItems").style.visibility = "visible";
-                        
-                        event.preventDefault();
-                          
+            // User Input validations 
+            if (pilotNameInput.value === "") {
+                alert("Pilot name is required");
+                document.getElementById("pilotName").focus();
+                event.preventDefault();
+            } else if (copilotNameInput.value === "") {
+                alert("Copilot name is required");
+                document.getElementById("copilotName").focus();
+                event.preventDefault();
+            } else if (fuelLevelInput.value === "" || isNaN(fuelLevelInput.value)) {
+                alert("Fuel level needs to be entered and should be a number");
+                document.getElementById("fuelLevel").focus();
+                event.preventDefault();
+            } else if (cargoMassInput.value === "" || isNaN(cargoMassInput.value)) {
+                alert("Cargo Mass should be entered and must be a number");
+                document.getElementById("cargoMass").focus();
+                event.preventDefault();
             }
+            launchStatus();
+        });
+    });
+
+    function launchStatus() {
+
+        document.getElementById("pilotStatus").innerHTML = `Pilot ${document.getElementById("pilotName").value} 
+             ready`;
+        document.getElementById("copilotStatus").innerHTML = `Pilot ${document.getElementById("copilotName").value}
+             ready`;
+        if (document.getElementById("fuelLevel").value < 10000 || document.getElementById("cargoMass").value > 10000) {
+
+            document.getElementById("launchStatus").innerHTML = "Not ready for launch";
+            document.getElementById("launchStatus").style.color = "red";
+
+            if (document.getElementById("fuelLevel").value < 10000) {
+                document.getElementById("fuelStatus").innerHTML = "Fuel level too low for launch";
+                document.getElementById("fuelLevel").focus();
+            }
+
+            if (document.getElementById("cargoMass").value > 10000) {
+                document.getElementById("cargoStatus").innerHTML = "Cargo mass too high for launch";
+                document.getElementById("cargoMass").focus();
+            }
+
+            event.preventDefault();
+        } else {
+            document.getElementById("launchStatus").innerHTML = "Shuttle is ready for launch";
+            document.getElementById("launchStatus").style.color = "green";
+            document.getElementById("fuelStatus").innerHTML  = "Fuel level high enough for launch";
+            document.getElementById("cargoStatus").innerHTML = "Cargo mass low enough for launch";
+            event.preventDefault();
         }
-                
 
-     </script>
-    <body>
-        <h1>Launch Checklist Form</h1>
-        <div id="missionTarget">
-            <!-- Fetch some planetary data -->
-        </div> 
+        document.getElementById("faultyItems").style.visibility = "visible";
+    }
+</script>
+
+<body>
+    <h1>Launch Checklist Form</h1>
+    
+        <!-- Fetch some planetary data -->
+        <div id="missionTarget"></div>
+
         <div id="launchForm">
-            <form>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Pilot Name <input type="text" name="pilotName" id="pilotName"/></label>
-                </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Co-pilot Name <input type="text" name="copilotName" id="copilotName"/></label>
-                </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Fuel Level (L) <input type="text" name="fuelLevel" id="fuelLevel"/></label> 
-                </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
-                    <label>Cargo Mass (kg) <input type="text" name="cargoMass" id="cargoMass"/></label>
-                </div>
-                <button id="formSubmit" onClick="launchStatus()"">Submit</button>
-            </form>
-            
-             
-        </div>
-        <div id="launchStatusCheck">
-            <h2 id="launchStatus">Awaiting Information Before Launch</h2>
-            <div  id="faultyItems">
-                <ol>
-                    <li id="pilotStatus"> Pilot Ready</li>
-                    <li id="copilotStatus">Co-pilot Ready</li>
-                    <li id="fuelStatus">Fuel level high enough for launch</li>
-                    <li id="cargoStatus">Cargo mass low enough for launch</li>
-
-                    
-                    <!-- else if (copilotNameInput.value === "") {
-                        alert("Copilot name is required");
-                        document.getElementById("copilotName").focus();
-                          event.preventDefault();
-                    
-                    <li>pilotStatus: ${id="pilotName"}</li> 
-                    <li>copilotStatus: ${id="copilotName"}</li> 
-                    <li>pilotStatus: ${id="pilotName"}</li> 
-                    <li>pilotStatus: ${id="pilotName"}</li>  -->
-                 
-                </ol>
+          <form>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label>Pilot Name <input type="text" name="pilotName" id="pilotName" /></label>
             </div>
-        </div>    
-    </body>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label>Co-pilot Name <input type="text" name="copilotName" id="copilotName" /></label>
+            </div>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label>Fuel Level (L) <input type="text" name="fuelLevel" id="fuelLevel" /></label>
+            </div>
+            <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin: 8 0;">
+                <label>Cargo Mass (kg) <input type="text" name="cargoMass" id="cargoMass" /></label>
+            </div>
+            <button id="formSubmit">Submit</button>
+        </form>    
+      </div>
+        
+        <div id="launchStatusCheck">
+                <h2 id="launchStatus">Awaiting Information Before Launch</h2>
+                <div id="faultyItems">
+                    <ol>
+                        <li id="pilotStatus"> Pilot Ready</li>
+                        <li id="copilotStatus">Co-pilot Ready</li>
+                        <li id="fuelStatus">Fuel level high enough for launch</li>
+                        <li id="cargoStatus">Cargo mass low enough for launch</li>
+                    </ol>
+                </div>
+        </div>
+
+</body>
+
 </html>
-
-
-
